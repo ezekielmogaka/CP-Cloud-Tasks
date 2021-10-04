@@ -1,0 +1,19 @@
+- hosts: myUbuntuEC2
+  gather_facts: False
+
+  vars:
+    - MyMessage: "Welcome to My Ubuntu EC2 Instance"
+
+  tasks:
+    - name: Install and Setup Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: copy custom index.html
+      template: src=index.html.j2 dest=/usr/share/nginx/html/index.html
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted

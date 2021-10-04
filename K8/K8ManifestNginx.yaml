@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginxwebserver
+  namespace: default
+  labels:
+    app: nginxwebserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginxwebserver
+  template:
+    metadata:
+      labels:
+        app: nginxwebserver
+    spec:
+      containers:
+        - name: nginx-hello
+          image: nginxdemos/hello
+          ports:
+            - containerPort: 80
+              name: nginx-hello
+#Create a service and expose port 80 for web server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxwebserver
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: nginxwebserver
